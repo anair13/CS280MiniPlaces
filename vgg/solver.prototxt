@@ -1,9 +1,9 @@
-net: "./vgg/train.prototxt"
+net: "./vgg/train_baseline.prototxt"
 test_state: { 
     stage: 'test-on-val'
 }
-test_iter: 1
-test_interval: 50001
+test_iter: 10
+test_interval: 5000
 base_lr: 0.01
 display: 10
 max_iter: 50000
