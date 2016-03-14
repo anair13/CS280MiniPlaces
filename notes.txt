@@ -1,0 +1,8 @@
+
+
+
+With random cropping, 25 outputs/input averaged for prob
+    Accuracy at 1 = 48.50%
+    Accuracy at 5 = 77.83%
+    Softmax cross-entropy error = 1.9567
+Predictions for split val dumped to: top_5_predictions.val.csv

@@ -9,7 +9,8 @@ OUT = 96
 Q = 4 # number of "bins" in each dimension
 OUTPUTS = (Q + 1) * (Q + 1)
 SPACE = IN - OUT
-STEP = SPACE / Q
+PAD = 0 # the outermost pixels are seen less frequently by the receptive fields, so it might help to exclude them
+STEP = (SPACE - PAD - PAD) / Q
 
 def crop(img, x, y):
     new_img = img[:, y:y+OUT, x:x+OUT]
@@ -31,8 +32,8 @@ class WindowLayer(caffe.Layer):
         for i in range(N):
             img_before = bottom[0].data[i, :, :, :]
 
-            for x in range(0, SPACE+1, STEP):
-                for y in range(0, SPACE+1, STEP):
+            for x in range(PAD, SPACE+1-PAD, STEP):
+                for y in range(PAD, SPACE+1-PAD, STEP):
                     top[0].data[j, :, :, :] = crop(img_before, x, y)
                     j = j + 1
 

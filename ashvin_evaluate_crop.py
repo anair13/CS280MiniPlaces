@@ -22,7 +22,7 @@ def get_split(split):
     return filename
 
 deploy_network = "./vgg/deploy_deeper_baseline_multicrop.prototxt"
-deploy_weights = "./snapshot_solver_deeper/vgg_net_iter_25000.caffemodel"
+deploy_weights = "./snapshot_solver_deeper/vgg_net_iter_15000.caffemodel"
 OUTPUTS = 25 # outputs per input image
 BATCH = 8
 
@@ -55,6 +55,12 @@ def eval_net(split, K=5):
     if split == "val":
         net = caffe.Net(deploy_network, deploy_weights, caffe.TRAIN)
 
+    def accuracy_at_k(preds, labels, k):
+        assert len(preds) == len(labels)
+        num_correct = sum(l in p[:k] for p, l in zip(preds, labels))
+        return float(num_correct) / len(preds)
+
+    print "Evaluating...."
     top_k_predictions = np.zeros((len(filenames), K), dtype=np.int32)
     if known_labels:
         correct_label_probs = np.zeros(len(filenames))
@@ -74,14 +80,17 @@ def eval_net(split, K=5):
             offset += 1
             if offset >= len(filenames):
                 break
-        print offset
+
+        if offset % 100 == 0:
+            print offset
+            if known_labels:
+                for k in [1, K]:
+                    accuracy = 100 * accuracy_at_k(top_k_predictions[:offset], labels[:offset], k)
+                    print '\tAccuracy at %d = %4.2f%%' % (k, accuracy)
+
         if offset >= len(filenames):
             break
     if known_labels:
-        def accuracy_at_k(preds, labels, k):
-            assert len(preds) == len(labels)
-            num_correct = sum(l in p[:k] for p, l in zip(preds, labels))
-            return float(num_correct) / len(preds)
         for k in [1, K]:
             accuracy = 100 * accuracy_at_k(top_k_predictions, labels, k)
             print '\tAccuracy at %d = %4.2f%%' % (k, accuracy)
@@ -103,7 +112,7 @@ if __name__ == "__main__":
 
     print 'Evaluating...\n'
 
-    for split in ('val', 'test'):
+    for split in ('val',):# 'test'):
         eval_net(split)
         print
     print 'Evaluation complete.'
