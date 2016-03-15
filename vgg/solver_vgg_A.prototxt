@@ -4,7 +4,7 @@ test_state: {
 }
 test_iter: 10
 test_interval: 5000
-base_lr: 0.01
+base_lr: 0.1
 display: 10
 max_iter: 50000
 lr_policy: "step"
@@ -16,5 +16,5 @@ snapshot: 5000
 snapshot_prefix: "./snapshot_solver_vgg_A/vgg_net"
 random_seed: 1
 average_loss: 10
-iter_size: 1
+iter_size: 2
 type: "SGD"
