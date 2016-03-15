@@ -13,7 +13,7 @@ layer {
   }
   image_data_param {
     source: "./development_kit/data/train.txt"
-    batch_size: 256
+    batch_size: 128
     shuffle: true
     root_folder: "./images/"
   }
@@ -35,7 +35,7 @@ layer {
   }
   image_data_param {
     source: "./development_kit/data/val.txt"
-    batch_size: 256
+    batch_size: 128
     shuffle: true
     root_folder: "./images/"
   }
